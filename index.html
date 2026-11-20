@@ -91,7 +91,7 @@ nav button{flex:1;border:0;background:none;color:var(--mu);font-size:.75rem;disp
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 // ====== SOZLAMA: Supabase > Project Settings > API dan oling (faqat anon kalit!) ======
-const SB_URL='YOUR_SUPABASE_URL', SB_KEY='YOUR_SUPABASE_ANON_KEY';
+const SB_URL='https://yfdcujrslgfibgmkzomt.supabase.co', SB_KEY='sb_publishable_TIbH8I6MnuqyO813Dr5b8A_0w6WELun';
 let sb=null,CFG_ERR='';
 try{if(!/^https?:\/\//.test(SB_URL)||SB_KEY.indexOf('YOUR')===0)throw new Error('index.html boshida SB_URL va SB_KEY ni yozing');if(typeof supabase==='undefined')throw new Error('Supabase kutubxonasi yuklanmadi (internet/CDN tekshiring)');sb=supabase.createClient(SB_URL,SB_KEY)}catch(e){CFG_ERR=e.message}
 addEventListener('error',e=>{const a=document.getElementById('app');if(a&&!a.innerHTML)a.innerHTML='<div class="card"><h2>Xato</h2><p>'+(e.message||'Script error')+'</p></div>'});
