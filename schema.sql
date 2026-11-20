@@ -77,14 +77,14 @@ alter table public.audit_log enable row level security;
 do $$ declare t text; begin
   foreach t in array array['profiles','qazo_balance','prayer_log','qazo_log','hayz_log','audit_log'] loop
     execute format('drop policy if exists own_select on public.%I', t);
-    execute format('create policy own_select on public.%I for select to authenticated using (user_id = auth.uid())', t);
+    execute format('create policy own_select on public.%I for select to authenticated using (user_id = (select auth.uid()))', t);
     execute format('revoke all on public.%I from anon, authenticated', t);
     execute format('grant select on public.%I to authenticated', t);
   end loop;
 end $$;
 revoke all on public.admins from anon, authenticated;
 drop policy if exists own_update on public.profiles;
-create policy own_update on public.profiles for update to authenticated using (user_id = auth.uid());
+create policy own_update on public.profiles for update to authenticated using (user_id = (select auth.uid()));
 grant update (name, city, asr_school, lang, theme, avatar_url, notify, notify_prefs, daily_target) on public.profiles to authenticated;
 
 -- Qazo hisoblash + profil saqlash (server tomonda, deterministik)
@@ -346,3 +346,8 @@ create policy avatars_update on storage.objects for update to authenticated
   using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy avatars_delete on storage.objects for delete to authenticated
   using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- TEZLIK: tez-tez ishlatiladigan so'rovlar uchun indekslar
+create index if not exists qazo_log_user_prayer_idx on public.qazo_log (user_id, prayer);
+create index if not exists audit_log_user_created_idx on public.audit_log (user_id, created_at desc);
+create index if not exists support_requests_phone_idx on public.support_requests (phone, created_at desc);
