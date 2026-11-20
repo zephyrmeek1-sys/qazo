@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Qazo</title><meta name="theme-color" content="#1f8a5f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f9d6e'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif'%3EQ%3C/text%3E%3C/svg%3E">
+<style>:root{--bg:#f6eedc;--card:#fffaf0;--in:#fffdf7;--tx:#1f2d24;--mu:#78806f;--br:#e8dcc2;--ac:#1f8a5f;--onac:#fff8e8;--ac2:#e3efd6;--gold:#d19a3a;--er:#c4473a;--sh:0 8px 24px rgba(90,70,20,.09);--glow:rgba(31,138,95,.16);--ring:rgba(31,138,95,.25);color-scheme:light}
+[data-t=dark]{--bg:#0e2a20;--card:#15382a;--in:#112f23;--tx:#f5ebd2;--mu:#a7b7a1;--br:#25503e;--ac:#f1e2b6;--onac:#12301f;--ac2:#1e4a39;--gold:#e6b95c;--er:#f08a7c;--sh:0 8px 24px rgba(0,0,0,.28);--glow:rgba(241,226,182,.10);--ring:rgba(241,226,182,.25);color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top) 0 118px;min-height:100vh;background:var(--bg) radial-gradient(900px 520px at 100% -8%,var(--ac2),transparent 62%) fixed;transition:background-color .4s,color .4s}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 420px at -10% 112%,rgba(209,154,58,.13),transparent 60%)}
+#glow{position:fixed;left:0;top:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 66%);pointer-events:none;z-index:0;transition:transform .35s ease-out}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:16px}
+h1,h2,.big,.hero h1{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;margin:0 0 6px;letter-spacing:-.01em}
+h1{font-size:1.7rem}h2{font-size:1.35rem}.mu{color:var(--mu)}.sm{font-size:.82rem}
+label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 2px}
+.card{background:var(--card);border:1px solid var(--br);border-radius:22px;padding:18px;margin:0 0 14px;box-shadow:var(--sh);transition:transform .25s,box-shadow .25s,border-color .25s}
+@media(hover:hover){.card:hover{transform:translateY(-2px);border-color:var(--ac)}}
+input:not([type=checkbox]),select{font:inherit;color:var(--tx);background:var(--in);border:1.5px solid var(--br);border-radius:14px;padding:12px 14px;width:100%;margin:4px 0 8px;transition:border-color .2s,box-shadow .2s;outline:0}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 4px var(--ring)}
+button{font:inherit;color:var(--tx);cursor:pointer;background:var(--in);border:1.5px solid var(--br);border-radius:14px;padding:11px 16px;transition:transform .15s,background .2s,border-color .2s,box-shadow .2s}
+button:hover{border-color:var(--ac);transform:translateY(-1px)}button:active{transform:scale(.97)}
+button.p{width:100%;margin-top:10px;font-weight:700;color:var(--onac);background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 70%,var(--gold)));border:0;padding:14px;box-shadow:0 8px 18px -8px var(--ac)}
+button.p:hover{box-shadow:0 12px 22px -8px var(--ac)}button.g{border:0;background:none;color:var(--mu);width:100%;margin-top:4px}button.d{color:var(--er)}
+.seg{display:flex;background:var(--ac2);border-radius:16px;padding:4px;margin-bottom:8px}.seg button{flex:1;border:0;background:none;border-radius:12px}.seg .on{background:var(--card);box-shadow:var(--sh);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chip{border-radius:999px;padding:8px 16px}.chip.on{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:700}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}.opt{padding:16px;border-radius:16px;font-weight:600}.opt.on{background:var(--ac2);border-color:var(--ac);box-shadow:0 0 0 3px var(--ring)}
+.stp{display:flex;align-items:center;justify-content:center;gap:22px;margin:10px 0}.stp button{width:48px;height:48px;border-radius:50%;font-size:1.4rem;padding:0}.stp b{font:700 2rem Georgia,serif;min-width:48px;text-align:center}
+.prog{height:6px;background:var(--ac2);border-radius:6px;overflow:hidden;margin-bottom:8px}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--gold));border-radius:6px;transition:width .4s}
+.err{color:var(--er);min-height:1.2em;font-size:.9rem}
+.brand{text-align:center;margin:22px 0 18px}.logo{width:64px;height:64px;filter:drop-shadow(0 8px 14px var(--ring))}.brand h1{font-size:2.2rem;margin-top:8px}
+.auth{max-width:440px;margin:0 auto}
+.hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:26px;padding:22px;margin-bottom:14px;color:#fbf3df;background:linear-gradient(135deg,#1f8a5f,#12573d);box-shadow:0 14px 30px -12px rgba(18,87,61,.6)}
+[data-t=dark] .hero{background:linear-gradient(135deg,#1f5a43,#133a2b);border:1px solid var(--br)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.09'%3E%3Crect x='15' y='15' width='30' height='30'/%3E%3Crect x='15' y='15' width='30' height='30' transform='rotate(45 30 30)'/%3E%3C/g%3E%3C/svg%3E")}
+.hero>*{position:relative;z-index:1}.hero h1{font-size:1.45rem;margin:2px 0 10px}.hero .mu2{opacity:.8;font-size:.85rem}
+.pill{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:4px 12px;font-size:.85rem}
+.ring{--p:0;width:92px;height:92px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) calc(var(--p)*1%),rgba(255,255,255,.2) 0);transition:.5s}
+.ring span{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:#14573e;font:700 1.15rem Georgia,serif}
+.card .ring{background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--ac2) 0)}.card .ring span{background:var(--card)}
+.tm{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;font-size:.8rem;color:var(--mu)}.tm b{display:block;color:var(--tx);font-size:1.05rem;margin-top:2px}
+.tmi{background:var(--in);border-radius:14px;padding:10px 2px;border:1px solid var(--br)}
+.sk .tmi{height:58px;animation:sh 1.2s infinite alternate}@keyframes sh{to{opacity:.45}}
+.lh{display:grid;grid-template-columns:1fr 70px 70px;gap:8px;font-size:.8rem;color:var(--mu);padding-bottom:6px;text-align:center}.lh span:first-child{text-align:left}.lh .c1{color:var(--ac)}.lh .c2{color:var(--gold)}
+.row{display:grid;grid-template-columns:1fr 70px 70px;gap:8px;align-items:center;padding:10px 6px;margin:0 -6px;border-top:1px solid var(--br);border-radius:14px;transition:background .2s}
+.row:hover{background:var(--ac2)}.row b{font:600 1.1rem Georgia,serif;display:block}
+.ck{position:relative;display:grid;place-items:center;cursor:pointer;height:40px}.ck input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.ck i{width:32px;height:32px;border-radius:11px;border:2px solid var(--br);background:var(--in);display:grid;place-items:center;transition:.2s}
+.ck:hover i{border-color:var(--ac);transform:scale(1.08)}.ck.q:hover i{border-color:var(--gold)}
+.ck i::after{content:"";width:8px;height:15px;border:solid var(--onac);border-width:0 3px 3px 0;margin-top:-3px;transform:rotate(45deg) scale(0);transition:transform .25s cubic-bezier(.3,1.7,.5,1)}
+.ck input:checked+i{background:var(--ac);border-color:var(--ac)}.ck.q input:checked+i{background:var(--gold);border-color:var(--gold)}.ck.q i::after{border-color:#2a1c00}
+.ck input:checked+i::after{transform:rotate(45deg) scale(1)}.ck input:disabled+i{opacity:.3}.ck input:disabled{cursor:not-allowed}
+.hz{display:flex;align-items:center;gap:12px;cursor:pointer}.hz b{display:block}
+nav{position:fixed;z-index:5;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(470px,calc(100% - 20px));display:flex;gap:4px;padding:6px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(12px);border:1px solid var(--br);border-radius:24px;box-shadow:var(--sh)}
+nav button{flex:1;border:0;background:none;color:var(--mu);font-size:.75rem;display:grid;justify-items:center;gap:2px;padding:8px 4px;border-radius:18px}nav button.on{background:var(--ac2);color:var(--ac);font-weight:700}[data-t=dark] nav button.on{color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:2px}@media(min-width:620px){.grid{grid-template-columns:repeat(3,1fr)}}
+.mini{margin:0;padding:14px}.big{font-size:1.7rem;display:block}.bar{height:8px;background:var(--ac2);border-radius:8px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--gold));border-radius:8px;transition:width .5s}
+.dn{display:flex;gap:8px;align-items:center}.dn button{width:46px;padding:11px 0;flex:none}.dn input{margin:0}
+.bars{display:flex;gap:8px;align-items:flex-end;height:120px}.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:.7rem;color:var(--mu)}.bars i{width:100%;background:linear-gradient(var(--gold),var(--ac));border-radius:8px 8px 3px 3px;min-height:4px;transition:height .5s}
+.who{display:flex;gap:14px;align-items:center}.av{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:var(--ac);color:var(--onac);font:700 1.5rem Georgia,serif}
+.sc{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:8px 6px;border-bottom:1px solid var(--br);text-align:left;white-space:nowrap}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.in>*{animation:up .5s both}.in>:nth-child(2){animation-delay:.06s}.in>:nth-child(3){animation-delay:.12s}.in>:nth-child(4){animation-delay:.18s}.in>:nth-child(5){animation-delay:.24s}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
+@media(min-width:700px){main{padding:30px 20px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.cal{margin:10px 0;padding:12px;background:var(--in);border:1px solid var(--br);border-radius:18px}.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-top:8px}
+.cd{padding:8px 0;border-radius:12px;border:0;background:none;font-size:.9rem}.cd.on{background:var(--ac);color:var(--onac);font-weight:700}.cd.td{box-shadow:inset 0 0 0 2px var(--gold)}.cd:disabled{opacity:.3}
+.datebtn{width:100%;text-align:left;margin:0 0 6px;display:flex;justify-content:space-between}.dn .datebtn{flex:1;width:auto;min-width:0;margin:0;padding:12px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wd{width:auto!important;padding:11px 16px!important}.cf{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--ac2);border-radius:14px;padding:10px 12px;margin:8px 0}
+.avw{position:relative;cursor:pointer;flex:none}.av{overflow:hidden;object-fit:cover}.avb{position:absolute;right:-4px;bottom:-4px;background:var(--gold);color:#2a1c00;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-size:.75rem}
+#toast{position:fixed;z-index:9;left:50%;top:14px;transform:translate(-50%,-140%);background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:12px 18px;box-shadow:var(--sh);transition:transform .4s cubic-bezier(.3,1.4,.5,1);max-width:90vw;font-weight:600}#toast.on{transform:translate(-50%,0)}
+.warn{background:color-mix(in srgb,var(--gold) 18%,transparent);border-radius:14px;padding:10px 12px;font-size:.88rem;margin:8px 0}
+</style></head><body><div id="glow"></div><main id="app"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// ====== SOZLAMA: Supabase > Project Settings > API dan oling (faqat anon kalit!) ======
+const SB_URL='YOUR_SUPABASE_URL', SB_KEY='YOUR_SUPABASE_ANON_KEY';
+let sb=null,CFG_ERR='';
+let DEMO=false;
+try{if(!/^https?:\/\//.test(SB_URL)||SB_KEY.indexOf('YOUR')===0){DEMO=true;sb=mockSB()}else{if(typeof supabase==='undefined')throw new Error('Supabase kutubxonasi yuklanmadi (internet/CDN tekshiring)');sb=supabase.createClient(SB_URL,SB_KEY)}}catch(e){CFG_ERR=e.message}
+function mockSB(){
+ let db;try{db=JSON.parse(localStorage.qdemo)}catch(e){}
+ db=db||{users:[],sess:null,profiles:[],bal:[],pl:[],ql:[],hl:[],al:[]};
+ const save=()=>{try{localStorage.qdemo=JSON.stringify(db)}catch(e){}};
+ const me=()=>db.sess,T={profiles:'profiles',qazo_balance:'bal',prayer_log:'pl',qazo_log:'ql',hayz_log:'hl',audit_log:'al'};
+ const mine=t=>db[t].filter(r=>r.user_id===me());
+ const D=s=>new Date(s+'T00:00:00Z'),iso=d=>d.toISOString().slice(0,10),add=(s,n)=>{const d=D(s);d.setUTCDate(d.getUTCDate()+n);return iso(d)};
+ const addY=(s,n)=>{const d=D(s),m=d.getUTCMonth(),dd=d.getUTCDate(),r=new Date(Date.UTC(d.getUTCFullYear()+n,m,1)),last=new Date(Date.UTC(r.getUTCFullYear(),m+1,0)).getUTCDate();r.setUTCDate(Math.min(dd,last));return iso(r)};
+ const log=(a,d)=>{db.al.unshift({user_id:me(),action:a,detail:d,created_at:new Date().toISOString()})};
+ const rem=p=>{const b=mine('bal').find(x=>x.prayer===p);return b?b.initial-mine('ql').filter(x=>x.prayer===p).length:0};
+ const E=m=>({data:null,error:{message:m}});
+ function from(n){let f=[],ord=null,lim=0,upd=null,rg=null;
+  const q={select(){return q},eq(k,v){f.push([k,v]);return q},order(c,o){ord=[c,!o||o.ascending!==false];return q},range(a,b){rg=[a,b];return q},limit(x){lim=x;return q},update(v){upd=v;return q},
+   maybeSingle(){return run().then(r=>({data:r.data[0]||null}))},then(a,b){return run().then(a,b)}};
+  async function run(){let r=mine(T[n]).filter(x=>f.every(([k,v])=>k==='user_id'||x[k]===v));
+   if(upd){r.forEach(x=>Object.assign(x,upd));save();return{data:null}}
+   if(ord){const[c,asc]=ord;r=r.slice().sort((a,b)=>(a[c]<b[c]?-1:a[c]>b[c]?1:0)*(asc?1:-1))}if(rg)r=r.slice(rg[0],rg[1]+1);if(lim)r=r.slice(0,lim);return{data:r}}
+  return q}
+ async function rpc(fn,a){const id=me();
+  if(fn==='admin_users'||fn==='admin_reset_password'||fn==='admin_delete_user'){
+   if(id!=='admin')return E('not admin');
+   if(fn==='admin_users')return{data:db.users.map(u=>{const p=db.profiles.find(x=>x.user_id===u.id)||{};return{user_id:u.id,phone:u.email.split('@')[0],name:p.name,gender:p.gender,created_at:u.created,last_sign_in:u.last,remaining:db.bal.filter(x=>x.user_id===u.id).reduce((s,x)=>s+x.initial,0)-db.ql.filter(x=>x.user_id===u.id).length}}),error:null};
+   if(fn==='admin_reset_password'){if((a.p_pass||'').length<6)return E('short');const u=db.users.find(x=>x.id===a.p_user);if(u)u.password=a.p_pass;save();return{error:null}}
+   ['profiles','bal','pl','ql','hl','al'].forEach(t=>db[t]=db[t].filter(x=>x.user_id!==a.p_user));db.users=db.users.filter(x=>x.id!==a.p_user);save();return{error:null}}
+  if(!id||id==='admin')return E('auth');
+  if(fn==='setup_profile'){
+   const s=a.p_start||add(addY(a.p_birth,a.p_gender==='male'?12:9),1),e=add(a.p_prayer_from,-1),d=Math.max(Math.round((D(e)-D(s))/864e5)+1,0);let ex=0;
+   if(a.p_gender==='female')ex=Math.min(d,Math.round(Math.max(d/30.4375-(a.p_preg_list||[]).reduce((s,x)=>s+x,0),0)*Math.min(Math.max(a.p_hayz||0,0),15))+(a.p_children||0)*Math.min(Math.max(a.p_nifas||0,0),60));
+   const n=d-ex,old=db.profiles.find(x=>x.user_id===id)||{city:'Tashkent',asr_school:1,lang:'uz',theme:'auto',notify:false};
+   db.profiles=db.profiles.filter(x=>x.user_id!==id);
+   db.profiles.push({...old,user_id:id,phone:db.users.find(u=>u.id===id).email.split('@')[0],name:a.p_name||null,gender:a.p_gender,birth_date:a.p_birth,prayer_from:a.p_prayer_from,start_date:s,married:!!a.p_married,hayz_days:a.p_hayz,children:a.p_children,nifas_days:a.p_nifas,preg_months:(a.p_preg_list||[]).reduce((s,x)=>s+x,0),pregnancies:a.p_preg_list||[]});
+   db.bal=db.bal.filter(x=>x.user_id!==id);P.forEach(p=>db.bal.push({user_id:id,prayer:p,initial:n}));
+   const r={start:s,end:e,days:d,excluded:ex,per_prayer:n};log('setup',r);save();return{data:r,error:null}}
+  if(fn==='toggle_item'){const{p_kind:k,p_prayer:p,p_day:day,p_on:on}=a;if(day>add(tod(),1))return E('future');
+   const L=k==='qazo'?'ql':k==='prayer'?'pl':'hl',has=db[L].some(x=>x.user_id===id&&x.day===day&&(k==='hayz'||x.prayer===p));
+   if(on){if(k==='qazo'&&rem(p)<=0&&!has)return E('empty');if(!has)db[L].push(k==='hayz'?{user_id:id,day}:{user_id:id,day,prayer:p,created_at:new Date().toISOString()});if(k==='hayz')db.pl=db.pl.filter(x=>!(x.user_id===id&&x.day===day))}
+   else db[L]=db[L].filter(x=>!(x.user_id===id&&x.day===day&&(k==='hayz'||x.prayer===p)));
+   log(k,{prayer:p,day,on});save();return{data:null,error:null}}
+  if(fn==='qazo_stats'){const bal={};P.forEach(p=>{const b=mine('bal').find(x=>x.prayer===p);if(b)bal[p]={initial:b.initial,done:mine('ql').filter(x=>x.prayer===p).length}});
+   const t0=tod();return{data:{bal,last30:mine('ql').filter(x=>x.day>add(t0,-30)).length,week:[0,1,2,3,4,5,6].map(i=>{const d=add(t0,i-(D(t0).getUTCDay()+6)%7);return{day:d,qazo:mine('ql').filter(x=>x.day===d).length,prayer:mine('pl').filter(x=>x.day===d).length}})},error:null}}
+  return E('unknown')}
+ const auth={async getSession(){return{data:{session:db.sess?{user:{id:db.sess}}:null}}},
+  async signUp({email,password}){if(db.users.find(u=>u.email===email))return{error:{message:'Bu raqam band'}};const id='u'+Date.now();db.users.push({id,email,password,created:new Date().toISOString(),last:null});db.sess=id;save();return{data:{session:{user:{id}}},error:null}},
+  async signInWithPassword({email,password}){if(email==='admin@demo'&&password==='admin123'){db.sess='admin';save();return{error:null}}const u=db.users.find(x=>x.email===email&&x.password===password);if(!u)return{error:{message:'Telefon yoki parol xato'}};u.last=new Date().toISOString();db.sess=u.id;save();return{error:null}},
+  async signOut(){db.sess=null;save()}};
+ const storage={from:()=>({async upload(p,b){const u=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(b)});db.av=db.av||{};db.av[p]=u;save();return{error:null}},getPublicUrl:p=>({data:{publicUrl:(db.av||{})[p]||''}})})};
+ return{from,rpc,auth,storage}}
+
+addEventListener('error',e=>{const a=document.getElementById('app');if(a&&!a.innerHTML)a.innerHTML='<div class="card"><h2>Xato</h2><p>'+(e.message||'Script error')+'</p></div>'});
+const P=['bomdod','peshin','asr','shom','xufton','vitr'];
+const UZ={hist:'Amallar tarixi',bomdod:'Bomdod',peshin:'Peshin',asr:'Asr',shom:'Shom',xufton:'Xufton',vitr:'Vitr',home:'Bosh sahifa',qazo:'Qazo',stats:'Statistika',profile:'Profil',today:'Bugun',one:'1 ta qazo',left:'Qolgan',login:'Kirish',reg:'Ro‘yxatdan o‘tish',phone:'Telefon raqam',pass:'Parol',pass2:'Parolni takrorlang',next:'Davom etish',back:'Orqaga',save:'Saqlash',out:'Chiqish',male:'Erkak',female:'Ayol',name:'Ismingiz (ixtiyoriy)',birth:'Tug‘ilgan sana',gender:'Jinsingiz',hayzBtn:'Bugun hayz/nifos kuni',hayzOn:'Hayz/nifos kuni: namoz farz emas',city:'Shahar',asr:'Asr usuli',hanafi:'Hanafiy',shafi:'Shofi‘iy',method:'Usul: MWL, Asr',lang:'Til',theme:'Rejim',total:'Jami qolgan qazo',done:'Jami o‘qilgan',week:'Oxirgi 7 kun',fc:'Shu tezlikda (oxirgi 30 kun) taxminan',years:'yilda tugaydi',day:'Kunni tanlang',export:'Ma’lumotni yuklab olish (JSON)',recalc:'Qazoni qayta hisoblash',
+a0:'Siz haqingizda',a1:'Muntazam namoz boshlangan sana',a1t:'Shu sanagacha o‘qilmagan namozlar qazo hisoblanadi. Hisob boshlanishi: erkak 12, ayol 9 yoshdan, keyingi kundan. Bu mahsulot qoidasi (tavsiya), umumiy fatvo emas — ishonchli olim bilan tekshiring.',from:'Muntazam o‘qiy boshlagan sana',manual:'Hisob boshlanish sanasini o‘zim tanlayman',start:'Hisob boshlanish sanasi',
+w1:'Ayollar uchun qisqa savollar',w1t:'Hayz va nifos kunlari namoz farz emas, shuning uchun ular qazodan ayriladi. Bu savollar faqat to‘g‘ri hisob uchun, ma’lumot sizdan boshqaga ko‘rsatilmaydi.',married:'Turmush qurganmisiz?',yes:'Ha',no:'Yo‘q',hayz:'Oyiga o‘rtacha necha kun hayz bo‘ladi? (3–10)',kids:'Nechta farzand ko‘rgansiz?',nif:'Tug‘ruqdan keyin o‘rtacha necha kun nifos bo‘lgan? (20–40)',preg:'Homiladorlik jami necha oy davom etgan? (homiladorlikda hayz kelmaydi)',
+res:'Hisob natijasi',days:'Hisob oralig‘i (kun)',excl:'Hayz/nifosga ayrildi (kun)',per:'Har bir namozdan qazo',ok:'Boshlash',errp:'Telefon raqam noto‘g‘ri',errm:'Parollar mos emas yoki 6 belgidan qisqa',errd:'Sanalarni kiriting',admin:'Admin panel',email:'Gmail',reset:'Parol o‘zgartirish',del:'O‘chirish',nop:'Yangi parol (kamida 6)'};
+const RU={bomdod:'Фаджр',peshin:'Зухр',asr:'Аср',shom:'Магриб',xufton:'Иша',vitr:'Витр',home:'Главная',qazo:'Каза',stats:'Статистика',profile:'Профиль',today:'Сегодня',one:'1 каза',left:'Осталось',login:'Войти',reg:'Регистрация',phone:'Номер телефона',pass:'Пароль',pass2:'Повторите пароль',next:'Далее',back:'Назад',save:'Сохранить',out:'Выйти',male:'Мужчина',female:'Женщина',gender:'Пол',birth:'Дата рождения',city:'Город',lang:'Язык',theme:'Режим',total:'Всего осталось',done:'Всего прочитано',week:'Последние 7 дней',ok:'Начать',recalc:'Пересчитать',export:'Скачать данные (JSON)',hist:'История действий',hayzBtn:'Сегодня день хайза/нифаса',hayzOn:'День хайза/нифаса: намаз не обязателен',asr:'Метод Асра',hanafi:'Ханафитский',shafi:'Шафиитский',method:'Метод: MWL, Аср',fc:'При таком темпе (последние 30 дней) примерно',years:'лет до завершения',day:'Выберите день',name:'Имя (по желанию)',a0:'О вас',a1:'Дата начала регулярного намаза',a1t:'Намазы до этой даты считаются каза. Расчёт начинается с 12 лет для мужчин и 9 лет для женщин, со следующего дня. Это правило продукта (рекомендация), а не общий фетва — уточните у знающего человека.',from:'Дата, с которой читаете регулярно',manual:'Выберу дату начала расчёта сам',start:'Дата начала расчёта',w1:'Несколько вопросов для женщин',w1t:'В дни хайза и нифаса намаз не обязателен, поэтому они вычитаются из каза. Вопросы нужны только для точного расчёта, данные никому не показываются.',married:'Вы замужем?',yes:'Да',no:'Нет',hayz:'Сколько дней в среднем длится хайз в месяц? (3–10)',kids:'Сколько у вас детей?',nif:'Сколько дней в среднем длился нифас после родов? (20–40)',preg:'Сколько месяцев всего длилась беременность? (хайза нет)',res:'Результат расчёта',days:'Период расчёта (дней)',excl:'Вычтено на хайз/нифас (дней)',per:'Каза по каждому намазу',errp:'Неверный номер телефона',errm:'Пароли не совпадают или короче 6 символов',errd:'Введите даты',admin:'Админ-панель',email:'Gmail',reset:'Сменить пароль',del:'Удалить',nop:'Новый пароль (от 6)'};
+const CYM=('o‘ў|g‘ғ|shш|chч|yoё|yuю|yaя|ngнг|aа|bб|dд|eе|fф|gг|hҳ|iи|jж|kк|lл|mм|nн|oо|pп|qқ|rр|sс|tт|uу|vв|xх|yй|zз').split('|').map(x=>{const m=x.match(/^([a-z‘]+)(.+)$/);return[m[1],m[2]]});
+function cy(s){return s.replace(/([A-Za-z]+‘?)/g,w=>{let o='',i=0,l=w.toLowerCase();while(i<w.length){let hit=0;for(const[k,v]of CYM){if(l.startsWith(k,i)){const up=w[i]!==w[i].toLowerCase();o+=up?v[0].toUpperCase()+v.slice(1):v;i+=k.length;hit=1;break}}if(!hit){o+=w[i];i++}}return o})}
+const t=k=>{const u=UZ[k]||k;return S.lang==='ru'?(RU[k]||u):S.lang==='cy'?cy(u):u};
+const tod=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+let S={am:'login',lang:localStorage.lang||'uz',theme:localStorage.theme||'auto',tab:'home',day:tod(),pr:null,st:null};
+const $=s=>document.querySelector(s),app=$('#app');
+function theme(){const d=S.theme==='dark'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.t=d?'dark':'light'}
+const hijri=d=>{try{return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){return''}};
+const FM=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'],FR=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],FD=['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'],FDR=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const fmt=d=>{const[y,mo,dd]=d.split('-').map(Number),w=new Date(Date.UTC(y,mo-1,dd)).getUTCDay();if(S.lang=='ru')return`${FDR[w]}, ${dd} ${FR[mo-1]} ${y}`;const x=`${FD[w]}, ${dd}-${FM[mo-1]} ${y}`;return S.lang=='cy'?cy(x):x};
+
+// ===== umumiy =====
+Object.assign(UZ,{tag:'Namoz va qazolaringizni tartib bilan yuriting',a0t:'Hisob sizning ma’lumotlaringizga asoslanadi va faqat sizga ko‘rinadi.',hayzT:'Hayz kunlari',mT:'Oilaviy holat',mt:'Keyingi savollar turmush qurgan bo‘lsangiz beriladi.',kT:'Farzandlar',nT:'Nifos',nt:'Tug‘ruqdan keyingi nifos kunlarida namoz farz emas. Har bir farzand uchun o‘rtacha kun olinadi.',pT:'Homiladorlik',pt:'Homiladorlikda hayz kelmaydi, shuning uchun bu oylar hayz hisobidan chiqariladi va namoz farz deb sanaladi.',pYN:'Homilador bo‘lganmisiz (hozir yoki ilgari)?',pM:'Jami necha oy homilador bo‘lgansiz?',auto:'Avto',light:'Kunduzgi',dark:'Tungi',errg:'Jinsni tanlang',errb:'Tug‘ilgan sanani to‘g‘ri kiriting',errf:'Sanani to‘g‘ri kiriting',errs:'Tanlang',times:'Namoz vaqtlari',more:'Batafsil',prog:'Jarayon',res2:'Hisob qanday qilindi',calc:'Boshlanishdan muntazam namozgacha bo‘lgan kunlar, hayz va nifos kunlari ayrilgan holda.'});
+Object.assign(RU,{tag:'Ведите свои намазы и каза по порядку',a0t:'Расчёт основан на ваших данных и виден только вам.',hayzT:'Дни хайза',mT:'Семейное положение',mt:'Следующие вопросы задаются, если вы замужем.',kT:'Дети',nT:'Нифас',nt:'В дни нифаса после родов намаз не обязателен. Берётся среднее число дней на каждого ребёнка.',pT:'Беременность',pt:'Во время беременности хайза нет, поэтому эти месяцы не вычитаются как хайз, и намаз считается обязательным.',pYN:'Были ли вы беременны (сейчас или раньше)?',pM:'Сколько месяцев всего длилась беременность?',auto:'Авто',light:'Светлый',dark:'Тёмный',errg:'Выберите пол',errb:'Введите дату рождения',errf:'Введите дату',errs:'Сделайте выбор',times:'Время намазов',res2:'Как рассчитано',calc:'Дни от начала обязательности до регулярного намаза за вычетом хайза и нифаса.'});
+let ANIM=true;
+const show=h=>{app.innerHTML=h;app.classList.remove('in');if(ANIM){void app.offsetWidth;app.classList.add('in')}ANIM=false};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const addD=(s,n)=>{const d=new Date(s+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
+const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',qazo:'<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/>',stats:'<path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/>',profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
+const logo=`<svg class="logo" viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="var(--ac)"/><path d="M29 11a13 13 0 1 0 0 26 10.5 10.5 0 1 1 0-26z" fill="var(--onac)"/><circle cx="34" cy="16" r="2.4" fill="var(--gold)"/></svg>`;
+const chipsLang=fn=>`<div class="chips" style="justify-content:center">${[['uz','Lotin'],['cy','Кирилл'],['ru','Рус']].map(([l,n])=>`<button class="chip ${S.lang==l?'on':''}" onclick="${fn}('${l}')">${n}</button>`).join('')}</div>`;
+const newO=()=>({step:0,re:false,gender:'',name:'',birth:'',from:'',manual:false,start:'',married:null,kids:0,pregYN:null,hayz:7,nifas:40,pregN:1,pm:[]});
+let O=newO();
+
+// ===== kirish / ro'yxat =====
+const mail=p=>p.replace(/\D/g,'')+'@qazo.app';
+const okPhone=p=>/^\d{9,15}$/.test(p.replace(/\D/g,''));
+function authView(m='login'){S.am=m;theme();const r=m=='reg';show(`<div class="auth"><div class="brand">${logo}<h1>Qazo</h1><p class="mu">${t('tag')}</p></div><div class="card"><div class="seg"><button class="${!r?'on':''}" onclick="authView('login')">${t('login')}</button><button class="${r?'on':''}" onclick="authView('reg')">${t('reg')}</button></div><label>${t('phone')}</label><input id="ph" type="tel" inputmode="tel" autocomplete="username" placeholder="998 90 123 45 67"><label>${t('pass')}</label><input id="pw" type="password" autocomplete="${r?'new-password':'current-password'}">${r?`<label>${t('pass2')}</label><input id="pw2" type="password" autocomplete="new-password">`:''}<div class="err" id="er"></div><button class="p" onclick="doAuth('${m}')">${t(r?'reg':'login')}</button></div>${chipsLang('authLang')}</div>`)}
+function authLang(l){S.lang=l;localStorage.lang=l;authView(S.am||'login')}
+async function doAuth(m){const ph=$('#ph').value,pw=$('#pw').value,e=$('#er');e.textContent='';
+if(!okPhone(ph)){e.textContent=t('errp');return}
+if(m=='reg'){if(pw.length<6||pw!==$('#pw2').value){e.textContent=t('errm');return}
+const{data,error}=await sb.auth.signUp({email:mail(ph),password:pw});if(error){e.textContent=error.message;return}
+if(!data.session){e.textContent='Supabase: Authentication > Email > "Confirm email" ni o‘chiring';return}O=newO();ANIM=true;onb()}
+else{const{error}=await sb.auth.signInWithPassword({email:mail(ph),password:pw});if(error){e.textContent=error.message;return}O=newO();ANIM=true;boot()}}
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'){const b=app.querySelector('button.p');if(b)b.click()}});
+
+// ===== namoz vaqtlari: mahalliy hisob (O'zbekiston musulmonlari idorasi taqvimiga moslangan) =====
+// Moslash: Toshkent, 2024-04-08/09 rasmiy taqvim (Asr Hanafiy, Xufton 15°; Bomdod 15°-2 daq, Peshin +1, Shom +2). Kerak bo'lsa PT ni o'zgartiring.
+const PT={fajr:15,isha:15,off:{bomdod:-2,peshin:1,asr:0,shom:2,xufton:0}};
+const CITY={Tashkent:[41.2995,69.2401,'Toshkent','Ташкент'],Samarkand:[39.6542,66.9597,'Samarqand','Самарканд'],Bukhara:[39.7747,64.4286,'Buxoro','Бухара'],Andijan:[40.7821,72.3442,'Andijon','Андижан'],Namangan:[41.0011,71.6683,'Namangan','Наманган'],Fergana:[40.3842,71.7843,'Farg‘ona','Фергана'],Nukus:[42.4531,59.6103,'Nukus','Нукус'],Qarshi:[38.8606,65.7891,'Qarshi','Карши'],Termez:[37.2242,67.2783,'Termiz','Термез'],Urgench:[41.55,60.6333,'Urganch','Ургенч'],Jizzakh:[40.1158,67.8422,'Jizzax','Джизак'],Gulistan:[40.4897,68.7842,'Guliston','Гулистан'],Navoi:[40.0844,65.3792,'Navoiy','Навои']};
+const cityName=k=>{const c=CITY[k]||CITY.Tashkent;return S.lang=='ru'?c[3]:S.lang=='cy'?cy(c[2]):c[2]};
+const calcTimes=(()=>{const R=Math.PI/180,sn=x=>Math.sin(x*R),cs=x=>Math.cos(x*R),tn=x=>Math.tan(x*R),as=x=>Math.asin(x)/R,ac=x=>Math.acos(x)/R,a2=(y,x)=>Math.atan2(y,x)/R,fx=(a,b)=>a-b*Math.floor(a/b);
+function sunp(y,m,d){let Y=y,M=m;if(M<=2){Y--;M+=12}const A=Math.floor(Y/100),B=2-A+Math.floor(A/4),jd=Math.floor(365.25*(Y+4716))+Math.floor(30.6001*(M+1))+d+B-1524.5+.5,D=jd-2451545,g=fx(357.529+.98560028*D,360),q=fx(280.459+.98564736*D,360),L=fx(q+1.915*sn(g)+.02*sn(2*g),360),e=23.439-3.6e-7*D,RA=fx(a2(cs(e)*sn(L),cs(L)),360)/15;let eq=q/15-fx(RA,24);if(eq>12)eq-=24;if(eq<-12)eq+=24;return{dc:as(sn(e)*sn(L)),eq}}
+const hm=h=>{h=fx(h+1/120,24);return String(Math.floor(h)).padStart(2,'0')+':'+String(Math.floor((h%1)*60)).padStart(2,'0')};
+return(ds,city)=>{const[y,m,d]=ds.split('-').map(Number),c=CITY[city]||CITY.Tashkent,lat=c[0],lng=c[1],s=sunp(y,m,d),T=a=>ac((-sn(a)-sn(s.dc)*sn(lat))/(cs(s.dc)*cs(lat)))/15,dh=12+5-lng/15-s.eq,As=ac((sn(as0(2+tn(Math.abs(lat-s.dc))))-sn(s.dc)*sn(lat))/(cs(s.dc)*cs(lat)))/15,o=PT.off;
+function as0(x){return Math.atan(1/x)/R}
+return{bomdod:hm(dh-T(PT.fajr)+o.bomdod/60),peshin:hm(dh+o.peshin/60),asr:hm(dh+As+o.asr/60),shom:hm(dh+T(.833)+o.shom/60),xufton:hm(dh+T(PT.isha)+o.xufton/60)}}})();
+const timesFor=ds=>calcTimes(ds,S.pr.city);
+function timesHTML(){const T=timesFor(tod());return P.slice(0,5).map(p=>`<div class="tmi">${t(p)}<b>${T[p]}</b></div>`).join('')}
+
+// ===== onboarding (har safar noldan, qadamlar javobga qarab) =====
+Object.assign(UZ,{week:'Joriy hafta (Du–Ya)',method:'Hisob: Hanafiy (Asr), O‘zbekiston musulmonlari idorasi taqvimiga moslashtirilgan',export:'Excel (.xlsx) yuklab olish',pN:'Necha marta homilador bo‘lgansiz? (hozirgi homiladorlik ham)',pmQ:'Necha oy davom etgan? (davom etayotgan bo‘lsa, hozirgacha necha oy)',mo:'oy',reW:'Diqqat: qayta hisoblash boshlang‘ich qazo balansini yangilaydi. O‘qilgan qazolar va tarix saqlanadi. Adashib bosgan bo‘lsangiz, orqaga qayting.',reC:'Qazo balansi qayta hisoblansinmi?',photo:'Rasm',cc:'Shahar o‘zgartirilsinmi?',ok2:'Tasdiqlash',cancel:'Bekor qilish',notif:'Eslatmalar',non:'Yoqish',noff:'O‘chirish',nnote:'Namoz vaqti kirganda xabar chiqadi. Hozircha ilova ochiq (yoki fon oynasida) bo‘lganda ishlaydi.',nn:'Brauzer bildirishnomani qo‘llamaydi',nd:'Ruxsat berilmadi',ntime:'Namoz vaqti kirdi',nrem:'Bugungi namozlarni belgilashni unutmang',pickd:'Kunni tanlash'});
+Object.assign(RU,{week:'Текущая неделя (Пн–Вс)',method:'Расчёт: ханафитский Аср, по календарю Духовного управления мусульман Узбекистана',export:'Скачать Excel (.xlsx)',pN:'Сколько раз вы были беременны? (включая нынешнюю)',pmQ:'Сколько месяцев длилась? (если продолжается — сколько уже)',mo:'мес.',reW:'Внимание: пересчёт обновит начальный баланс каза. Прочитанные каза и история сохранятся. Если нажали случайно — вернитесь назад.',reC:'Пересчитать баланс каза?',photo:'Фото',cc:'Сменить город?',ok2:'Подтвердить',cancel:'Отмена',notif:'Напоминания',non:'Включить',noff:'Выключить',nnote:'Уведомление приходит при наступлении времени намаза, пока приложение открыто.',nn:'Браузер не поддерживает уведомления',nd:'Нет разрешения',ntime:'Время намаза',nrem:'Не забудьте отметить намазы за сегодня',pickd:'Выбрать день'});
+const pmv=i=>O.pm[i]!=null?O.pm[i]:(i<O.kids?9:3);
+const steps=()=>{const a=['about','from'];if(O.gender==='female'){a.push('hayz','married');if(O.married){a.push('kids');if(O.kids>0)a.push('nifas');else a.push('pregYN');if(O.kids>0||O.pregYN){a.push('pregN');for(let i=0;i<O.pregN;i++)a.push('pm'+i)}}}return a};
+function grab(){const v=i=>{const x=$('#'+i);return x?x.value:null};if(v('n')!==null)O.name=v('n');if(v('b')!==null)O.birth=v('b');if(v('f')!==null)O.from=v('f');if(v('s')!==null)O.start=v('s')}
+function setO(k,v){grab();O[k]=v;if(k=='gender'&&v=='male')O.married=null;onb()}
+const stp=(fn,val,unit)=>`<div class="stp"><button onclick="${fn}(-1)">−</button><b>${val}${unit?`<span class="mu sm"> ${unit}</span>`:''}</b><button onclick="${fn}(1)">+</button></div>`;
+function incK(d){O.kids=Math.max(0,Math.min(25,O.kids+d));onb()}
+function incN(d){O.pregN=Math.max(1,Math.max(O.kids,O.pregN+d));O.pregN=Math.min(15,O.pregN);onb()}
+function incM(i,d){O.pm[i]=Math.max(1,Math.min(12,pmv(i)+d));onb()}
+function onb(){theme();if(O.gender==='female'&&O.married){O.pregN=Math.min(15,Math.max(O.pregN,O.kids,1))}
+const st=steps(),k=st[O.step]||st[0],n=st.length,last=O.step>=n-1;
+const H=(ti,tx,bd)=>`<div class="card"><div class="prog"><i style="width:${(O.step+1)/n*100}%"></i></div><div class="mu sm">${O.step+1} / ${n}</div><h2>${ti}</h2>${O.re&&O.step==0?`<div class="warn">${t('reW')}</div>`:''}<p class="mu">${tx}</p>${bd}<div class="err" id="er"></div><button class="p" onclick="nextStep()">${last?t('ok'):t('next')}</button>${O.step?`<button class="g" onclick="prevStep()">${t('back')}</button>`:(O.re?`<button class="g" onclick="cancelOnb()">${t('back')}</button>`:'')}</div>`;
+const ch=(vals,cur,key)=>`<div class="chips">${vals.map(v=>`<button class="chip ${cur==v?'on':''}" onclick="setO('${key}',${v})">${v}</button>`).join('')}</div>`;
+const yn=key=>`<div class="opts"><button class="opt ${O[key]===true?'on':''}" onclick="setO('${key}',true)">${t('yes')}</button><button class="opt ${O[key]===false?'on':''}" onclick="setO('${key}',false)">${t('no')}</button></div>`;
+const G=g=>`<button class="opt ${O.gender==g?'on':''}" onclick="setO('gender','${g}')">${t(g)}</button>`;
+let h='';
+if(k=='about')h=H(t('a0'),t('a0t'),`<label>${t('name')}</label><input id="n" value="${esc(O.name)}"><label>${t('gender')}</label><div class="opts">${G('male')}${G('female')}</div><label>${t('birth')}</label><input id="b" type="date" max="${tod()}" value="${O.birth}">`);
+if(k=='from')h=H(t('a1'),t('a1t'),`<label>${t('from')}</label><input id="f" type="date" max="${tod()}" value="${O.from}"><label style="display:flex;gap:10px;align-items:center;color:var(--tx)"><input type="checkbox" ${O.manual?'checked':''} onchange="setO('manual',this.checked)" style="width:20px;height:20px;accent-color:var(--ac)">${t('manual')}</label>${O.manual?`<label>${t('start')}</label><input id="s" type="date" value="${O.start}">`:''}`);
+if(k=='hayz')h=H(t('hayzT'),t('w1t'),`<label>${t('hayz')}</label>${ch([3,4,5,6,7,8,9,10],O.hayz,'hayz')}`);
+if(k=='married')h=H(t('mT'),t('mt'),`<label>${t('married')}</label>${yn('married')}`);
+if(k=='kids')h=H(t('kT'),t('kids'),stp('incK',O.kids));
+if(k=='nifas')h=H(t('nT'),t('nt'),`<label>${t('nif')}</label>${ch([20,25,30,35,40],O.nifas,'nifas')}`);
+if(k=='pregYN')h=H(t('pT'),t('pt'),`<label>${t('pYN')}</label>${yn('pregYN')}`);
+if(k=='pregN')h=H(t('pT'),t('pN'),stp('incN',O.pregN));
+if(k.startsWith('pm')){const i=+k.slice(2);h=H(`${i+1}-${t('pT').toLowerCase()}`,t('pmQ'),stp(`incM.bind(0,${i})`,pmv(i),t('mo')))}
+show(h)}
+function prevStep(){grab();O.step--;ANIM=true;onb()}
+function cancelOnb(){O=newO();ANIM=true;boot()}
+async function nextStep(){grab();const k=steps()[O.step],e=$('#er'),T=tod();
+if(k=='about'){if(!O.gender)return e.textContent=t('errg');if(!O.birth||O.birth>T||O.birth<'1900-01-01')return e.textContent=t('errb')}
+if(k=='from'){if(!O.from||O.from>T||O.from<O.birth)return e.textContent=t('errf');if(O.manual&&(!O.start||O.start>T))return e.textContent=t('errf')}
+if(k=='married'&&O.married===null||k=='pregYN'&&O.pregYN===null)return e.textContent=t('errs');
+if(O.step<steps().length-1){O.step++;ANIM=true;return onb()}
+if(O.re&&!confirm(t('reC')))return;
+const w=O.gender=='female',m=w&&O.married,c=m?O.kids:0,pl=m&&(c>0||O.pregYN)?Array.from({length:O.pregN},(_,i)=>pmv(i)):[];
+const{data,error}=await sb.rpc('setup_profile',{p_name:O.name,p_gender:O.gender,p_birth:O.birth,p_prayer_from:O.from,p_start:O.manual&&O.start?O.start:null,p_married:!!m,p_hayz:w?O.hayz:0,p_children:c,p_nifas:c>0?O.nifas:0,p_preg_list:pl});
+if(error){e.textContent=error.message;return}
+ANIM=true;show(`<div class="card"><h2>${t('res')}</h2><p class="mu">${data.start} → ${data.end}</p><div class="grid"><div class="card mini"><span class="mu sm">${t('days')}</span><b class="big">${data.days}</b></div><div class="card mini"><span class="mu sm">${t('excl')}</span><b class="big">${data.excluded}</b></div><div class="card mini"><span class="mu sm">${t('per')}</span><b class="big">${data.per_prayer}</b></div></div><p class="mu sm">${t('calc')}</p><button class="p" onclick="O=newO();ANIM=true;boot()">${t('ok')}</button></div>`)}
+function reOnb(){const p=S.pr,pg=p.pregnancies||[];O={step:0,re:true,gender:p.gender,name:p.name||'',birth:p.birth_date||'',from:p.prayer_from||'',manual:false,start:'',married:p.gender=='female'?!!p.married:null,kids:p.children||0,pregYN:p.gender=='female'&&p.married&&!p.children?pg.length>0:null,hayz:p.hayz_days||7,nifas:p.nifas_days||40,pregN:Math.max(1,pg.length,p.children||0),pm:pg.slice()};ANIM=true;onb()}
+
+// ===== asosiy ilova =====
+async function boot(){if(!sb){theme();show(`<div class="card"><h1>Qazo</h1><p class="err">${esc(CFG_ERR)}</p><p class="mu">Supabase → Project Settings → API: Project URL va anon kalitni SB_URL va SB_KEY ga yozing.</p></div>`);return}
+if(DEMO&&!document.getElementById('demo'))app.insertAdjacentHTML('beforebegin','<div id="demo" class="mu sm" style="text-align:center;padding:8px;background:var(--ac2);position:relative;z-index:1">DEMO rejim: ma’lumot faqat shu brauzerda. Admin: #admin → admin@demo / admin123</div>');
+if(location.hash=='#admin')return adminView();const{data:{session}}=await sb.auth.getSession();if(!session)return authView(S.am||'login');
+const{data}=await sb.from('profiles').select('*').eq('user_id',session.user.id).maybeSingle();if(!data){onb();return}
+S.pr=data;S.lang=data.lang||S.lang;S.theme=data.theme||S.theme;S.day=tod();await refresh()}
+async function refresh(){const[a,b]=await Promise.all([sb.rpc('qazo_stats'),dayData(S.day)]);S.st=a.data;S.dd=b;render()}
+async function dayData(d){const q=x=>sb.from(x).select('*').eq('day',d);const[p,z,h]=await Promise.all([q('prayer_log'),q('qazo_log'),q('hayz_log')]);return{p:new Set((p.data||[]).map(x=>x.prayer)),z:new Set((z.data||[]).map(x=>x.prayer)),h:!!(h.data||[]).length}}
+const rem=p=>{const b=S.st.bal[p];return b?b.initial-b.done:0};
+const ck=(k,p,on,dis,c)=>`<label class="ck ${c}"><input type="checkbox" ${on?'checked':''} ${dis?'disabled':''} onchange="tg('${k}','${p}',this.checked)"><i></i></label>`;
+function list(){const hz=S.dd.h;return `<div class="lh"><span>${fmt(S.day)}</span><span class="c1">${t('today')}</span><span class="c2">${t('one')}</span></div>`+P.map(p=>{const r=rem(p);return `<div class="row"><div><b>${t(p)}</b><span class="mu sm">${t('left')}: ${r.toLocaleString()}</span></div>${ck('prayer',p,S.dd.p.has(p),hz,'')}${ck('qazo',p,S.dd.z.has(p),!S.dd.z.has(p)&&r<=0,'q')}</div>`}).join('')}
+async function tg(k,p,on){const day=S.day;
+if(k=='qazo'){S.dd.z[on?'add':'delete'](p);if(S.st.bal[p])S.st.bal[p].done+=on?1:-1}else if(k=='prayer')S.dd.p[on?'add':'delete'](p);else{S.dd.h=on;if(on)S.dd.p.clear()}
+render();const{error}=await sb.rpc('toggle_item',{p_kind:k,p_prayer:p,p_day:day,p_on:on});if(error){alert(error.message);await refresh()}}
+async function setDay(v){if(!v||v>tod())return;S.day=v;S.dd=await dayData(v);render()}
+// kalendar (hafta dushanbadan boshlanadi)
+const MU=['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'],MR=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const MN=()=>S.lang=='ru'?MR:S.lang=='cy'?MU.map(cy):MU;
+const WD=()=>S.lang=='ru'?['Пн','Вт','Ср','Чт','Пт','Сб','Вс']:S.lang=='cy'?['Ду','Се','Чо','Па','Жу','Ша','Як']:['Du','Se','Ch','Pa','Ju','Sh','Ya'];
+function calHTML(){const[y,m]=S.cm.split('-').map(Number),first=(new Date(Date.UTC(y,m-1,1)).getUTCDay()+6)%7,days=new Date(Date.UTC(y,m,0)).getUTCDate(),T=tod();let c='<i></i>'.repeat(first);
+for(let d=1;d<=days;d++){const s=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;c+=`<button class="cd ${s==S.day?'on':''} ${s==T?'td':''}" ${s>T?'disabled':''} onclick="pickDay('${s}')">${d}</button>`}
+return `<div class="cal"><div class="dn"><button onclick="calNav(-12)">«</button><button onclick="calNav(-1)">‹</button><b style="flex:1;text-align:center">${MN()[m-1]} ${y}</b><button onclick="calNav(1)" ${S.cm>=T.slice(0,7)?'disabled':''}>›</button><button onclick="calNav(12)" ${S.cm>=T.slice(0,7)?'disabled':''}>»</button></div><div class="cg">${WD().map(x=>`<span class="mu sm">${x}</span>`).join('')}${c}</div></div>`}
+function calNav(n){const[y,m]=S.cm.split('-').map(Number),d=new Date(Date.UTC(y,m-1+n,1)),r=d.toISOString().slice(0,7);S.cm=r>tod().slice(0,7)?tod().slice(0,7):r;render()}
+function pickDay(s){S.cal=false;setDay(s)}
+const chip=(on,fn,txt)=>`<button class="chip ${on?'on':''}" onclick="${fn}">${txt}</button>`;
+const avUrl=p=>{if(!p)return'';const[a,q]=p.split('?');return sb.storage.from('avatars').getPublicUrl(a).data.publicUrl+(q?'?'+q:'')};
+function render(){theme();const f=S.pr.gender=='female',tot=P.reduce((a,p)=>a+rem(p),0),dn=P.reduce((a,p)=>a+(S.st.bal[p]?S.st.bal[p].done:0),0),all=tot+dn;let c='';
+if(S.tab=='home'){S.day=tod();const d6=P.filter(p=>S.dd.p.has(p)).length;
+c=`<div class="hero"><div><div class="mu2">${hijri(new Date())}</div><h1>${fmt(tod())}</h1><span class="pill">${t('total')}: ${tot.toLocaleString()}</span></div><div class="ring" style="--p:${Math.round(d6/6*100)}"><span>${d6}/6</span></div></div>
+<div class="card"><h3 style="margin:0 0 10px;font-size:.95rem">${t('times')} · ${esc(cityName(S.pr.city))}</h3><div class="tm">${timesHTML()}</div><div class="mu sm" style="margin-top:8px">${t('method')}</div></div>
+${f?`<div class="card"><label class="hz"><span class="ck"><input type="checkbox" ${S.dd.h?'checked':''} onchange="tg('hayz','',this.checked)"><i></i></span><span><b>${t('hayzBtn')}</b>${S.dd.h?`<span class="mu sm">${t('hayzOn')}</span>`:''}</span></label></div>`:''}
+<div class="card">${list()}</div>`}
+if(S.tab=='qazo')c=`<h1>${t('qazo')}</h1><div class="grid">${P.map(p=>{const b=S.st.bal[p]||{initial:0,done:0},pc=b.initial?Math.round(b.done/b.initial*100):0;return `<div class="card mini"><span class="mu sm">${t(p)}</span><b class="big">${rem(p).toLocaleString()}</b><div class="bar"><i style="width:${pc}%"></i></div><span class="mu sm">${pc}%</span></div>`}).join('')}</div><div class="card" style="margin-top:14px"><label>${t('day')}</label><div class="dn"><button onclick="setDay(addD(S.day,-1))">‹</button><button class="datebtn" onclick="S.cal=!S.cal;S.cm=S.day.slice(0,7);render()"><span>${fmt(S.day)}</span><span>▾</span></button><button onclick="setDay(addD(S.day,1))" ${S.day>=tod()?'disabled':''}>›</button></div>${S.cal?calHTML():''}${list()}</div>`;
+if(S.tab=='stats'){const w=S.st.week,mx=Math.max(1,...w.map(x=>x.qazo+x.prayer)),pc=all?Math.round(dn/all*100):0,r30=S.st.last30/30;c=`<h1>${t('stats')}</h1><div class="card who"><div class="ring" style="--p:${pc}"><span>${pc}%</span></div><div><div>${t('total')}: <b>${tot.toLocaleString()}</b></div><div>${t('done')}: <b>${dn.toLocaleString()}</b></div>${r30>0?`<div class="mu sm">${t('fc')} ${(tot/r30/365).toFixed(1)} ${t('years')}</div>`:''}</div></div><div class="card"><h3 style="margin:0 0 12px;font-size:.95rem">${t('week')}</h3><div class="bars">${w.map((x,i)=>`<div><i title="${x.day}" style="height:${Math.max(4,(x.qazo+x.prayer)/mx*88)}%"></i>${WD()[i]}</div>`).join('')}</div></div>`}
+if(S.tab=='profile'){const pend=S.pcity&&S.pcity!=S.pr.city;
+const av=S.pr.avatar_url?`<img class="av" src="${esc(avUrl(S.pr.avatar_url))}" alt="">`:`<div class="av">${esc((S.pr.name||S.pr.phone||'Q')[0]).toUpperCase()}</div>`;
+c=`<h1>${t('profile')}</h1><div class="card who"><label class="avw" title="${t('photo')}">${av}<input type="file" accept="image/*" hidden onchange="upAv(this)"><span class="avb">✎</span></label><div style="flex:1;min-width:0"><div class="dn"><input id="pn" value="${esc(S.pr.name||'')}" placeholder="${t('name')}"><button class="wd" onclick="pf('name',$('#pn').value.trim())">${t('save')}</button></div><div class="mu sm">${esc(S.pr.phone)}</div></div></div>
+<div class="card"><label>${t('lang')}</label><div class="chips">${[['uz','Lotin'],['cy','Кирилл'],['ru','Русский']].map(([l,n])=>chip(S.lang==l,`pf('lang','${l}')`,n)).join('')}</div><label>${t('theme')}</label><div class="chips">${['auto','light','dark'].map(v=>chip(S.theme==v,`pf('theme','${v}')`,t(v))).join('')}</div><label>${t('city')}</label><select onchange="S.pcity=this.value;render()">${Object.keys(CITY).map(v=>`<option value="${v}" ${(S.pcity||S.pr.city)==v?'selected':''}>${esc(cityName(v))}</option>`).join('')}</select>${pend?`<div class="cf"><span style="flex:1">${t('cc')} ${esc(cityName(S.pr.city))} → <b>${esc(cityName(S.pcity))}</b></span><button class="chip on" onclick="pf('city',S.pcity);S.pcity=null">${t('ok2')}</button><button class="chip" onclick="S.pcity=null;render()">${t('cancel')}</button></div>`:''}</div>
+<div class="card"><label style="margin-top:0">${t('notif')}</label><div class="chips">${chip(!!S.pr.notify,'setNotify(true)',t('non'))}${chip(!S.pr.notify,'setNotify(false)',t('noff'))}</div><div class="mu sm">${t('nnote')}</div></div>
+<div class="card"><div class="chips"><button onclick="reOnb()">${t('recalc')}</button><button onclick="hist()">${t('hist')}</button><button onclick="exp()">${t('export')}</button><button class="d" onclick="out()">${t('out')}</button></div></div><div class="card sc" id="hs" style="display:none"></div>`}
+show(c+`<nav>${['home','qazo','stats','profile'].map(k=>`<button class="${S.tab==k?'on':''}" onclick="go('${k}')">${ico(k)}${t(k)}</button>`).join('')}</nav>`)}
+function go(k){if(S.tab!=k)ANIM=true;S.tab=k;S.day=tod();S.cal=false;refresh()}
+async function out(){await sb.auth.signOut();O=newO();S.pr=null;S.tab='home';ANIM=true;boot()}
+async function pf(k,v){const{error}=await sb.from('profiles').update({[k]:v}).eq('user_id',S.pr.user_id);if(error){alert(error.message);return}S.pr[k]=v;if(k=='lang'){S.lang=v;localStorage.lang=v}if(k=='theme'){S.theme=v;localStorage.theme=v}render()}
+async function upAv(inp){const f=inp.files[0];if(!f)return;try{const img=await createImageBitmap(f),c=document.createElement('canvas');c.width=c.height=256;const s=Math.min(img.width,img.height);c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,256,256);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.85)),path=S.pr.user_id+'/avatar.jpg',{error}=await sb.storage.from('avatars').upload(path,b,{upsert:true,contentType:'image/jpeg'});if(error)throw error;await pf('avatar_url',path+'?v='+Date.now())}catch(e){alert(e.message||'Xato')}}
+async function hist(){const{data}=await sb.from('audit_log').select('*').order('created_at',{ascending:false}).limit(30);const e=$('#hs');e.style.display='block';e.innerHTML='<table>'+(data||[]).map(x=>`<tr><td>${esc(x.created_at.slice(0,16).replace('T',' '))}</td><td>${esc(x.action)}</td><td>${esc(x.detail&&x.detail.prayer?t(x.detail.prayer):'')} ${esc(x.detail&&x.detail.day||'')} ${x.detail&&x.detail.on===false?'↩':''}</td></tr>`).join('')+'</table>'}
+// ===== Excel eksport =====
+async function allRows(n,col){let o=[],i=0;for(;;){const{data}=await sb.from(n).select('*').order(col,{ascending:true}).range(i,i+999);if(!data||!data.length)break;o=o.concat(data);if(data.length<1000)break;i+=1000}return o}
+const loadX=()=>new Promise(r=>{if(window.XLSX)return r(true);const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=()=>r(true);s.onerror=()=>r(false);document.head.appendChild(s)});
+async function exp(){const[bal,pl,ql,hl]=await Promise.all([allRows('qazo_balance','prayer'),allRows('prayer_log','day'),allRows('qazo_log','day'),allRows('hayz_log','day')]),done=p=>ql.filter(x=>x.prayer==p).length,pn=p=>({bomdod:'Bomdod',peshin:'Peshin',asr:'Asr',shom:'Shom',xufton:'Xufton',vitr:'Vitr'})[p]||p;
+const sh={'Profil':[{Ism:S.pr.name||'',Telefon:S.pr.phone,Jins:S.pr.gender,'Tug‘ilgan sana':S.pr.birth_date,'Hisob boshlanishi':S.pr.start_date,'Muntazam namoz boshlangan':S.pr.prayer_from,Shahar:S.pr.city}],
+'Qazo balansi':bal.map(b=>({Namoz:pn(b.prayer),Boshlangich:b.initial,Oqilgan:done(b.prayer),Qolgan:b.initial-done(b.prayer)})),
+'Kunlik namoz':pl.map(x=>({Sana:x.day,Namoz:pn(x.prayer)})),'Oqilgan qazo':ql.map(x=>({Sana:x.day,Namoz:pn(x.prayer)})),'Hayz kunlari':hl.map(x=>({Sana:x.day}))};
+if(await loadX()){const wb=XLSX.utils.book_new();for(const k in sh)XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(sh[k].length?sh[k]:[{}]),k);XLSX.writeFile(wb,'qazo-'+tod()+'.xlsx')}
+else{const csv='\ufeff'+sh['Qazo balansi'].map(r=>Object.values(r).join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='qazo-'+tod()+'.csv';a.click()}}
+// ===== eslatmalar (ilova ochiq bo'lganda) =====
+function toast(m){let e=$('#toast');if(!e){e=document.createElement('div');e.id='toast';document.body.appendChild(e)}e.textContent=m;e.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',7000)}
+function notify(ti,b){toast(ti+(b?' · '+b:''));try{if(window.Notification&&Notification.permission==='granted')new Notification(ti,{body:b})}catch(e){}}
+async function setNotify(on){if(on){if(!window.Notification){alert(t('nn'));return}const p=await Notification.requestPermission();if(p!=='granted'){alert(t('nd'));return}}await pf('notify',on)}
+function tick(){if(!S.pr||!S.pr.notify)return;const T=tod(),h=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Tashkent',hour:'2-digit',minute:'2-digit'});S.fired=S.fired||{};const tt=timesFor(T);
+P.slice(0,5).forEach(p=>{const k=T+p;if(tt[p]===h&&!S.fired[k]){S.fired[k]=1;if(!(S.dd&&S.dd.h&&S.day==T))notify(t(p),t('ntime')+' · '+cityName(S.pr.city))}});
+if(h==='21:30'&&!S.fired[T+'ev']&&S.dd&&S.day==T&&!S.dd.h){S.fired[T+'ev']=1;const x=P.slice(0,5).filter(p=>!S.dd.p.has(p)).length;if(x)notify(t('nrem'),`${5-x}/5`)}}
+setInterval(tick,20000);
+
+// ===== ADMIN (#admin) =====
+function adminView(msg=''){theme();ANIM=true;show(`<div class="auth"><div class="brand">${logo}<h1>${t('admin')}</h1></div><div class="card"><label>${t('email')}</label><input id="ae" type="email" autocomplete="username"><label>${t('pass')}</label><input id="ap" type="password" autocomplete="current-password"><div class="err">${esc(msg)}</div><button class="p" onclick="adminLogin()">${t('login')}</button></div></div>`)}
+async function adminLogin(){const{error}=await sb.auth.signInWithPassword({email:$('#ae').value.trim(),password:$('#ap').value});if(error)return adminView(error.message);adminList()}
+async function adminList(){const{data,error}=await sb.rpc('admin_users');if(error){await sb.auth.signOut();return adminView('Ruxsat yo‘q')}
+show(`<div class="card"><div class="top"><h1>${t('admin')}</h1><button onclick="sb.auth.signOut().then(()=>adminView())">${t('out')}</button></div><p class="mu sm">${data.length} ta foydalanuvchi. Parollar hash ko‘rinishida saqlanadi va ko‘rsatilmaydi.</p><div class="sc"><table><tr><th>${t('phone')}</th><th>${t('name')}</th><th>Jins</th><th>Qazo</th><th>Ro‘yxat</th><th>Oxirgi kirish</th><th></th></tr>${data.map(u=>`<tr><td>${esc(u.phone)}</td><td>${esc(u.name)}</td><td>${esc(u.gender)}</td><td>${u.remaining}</td><td>${esc((u.created_at||'').slice(0,10))}</td><td>${esc((u.last_sign_in||'').slice(0,10))}</td><td><button onclick="adminPass('${u.user_id}')">${t('reset')}</button> <button class="d" onclick="adminDel('${u.user_id}')">${t('del')}</button></td></tr>`).join('')}</table></div></div>`)}
+async function adminPass(id){const p=prompt(t('nop'));if(!p)return;const{error}=await sb.rpc('admin_reset_password',{p_user:id,p_pass:p});alert(error?error.message:'OK')}
+async function adminDel(id){if(!confirm('O‘chirilsinmi? Qaytarib bo‘lmaydi.'))return;await sb.rpc('admin_delete_user',{p_user:id});adminList()}
+
+// ===== PWA, effektlar, ishga tushirish =====
+try{const ic="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f9d6e'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif'%3EQ%3C/text%3E%3C/svg%3E";const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify({name:'Qazo',short_name:'Qazo',start_url:location.pathname,display:'standalone',background_color:'#f6eedc',theme_color:'#1f8a5f',icons:[{src:ic,sizes:'512x512',type:'image/svg+xml'}]})],{type:'application/manifest+json'}));document.head.appendChild(l)}catch(e){}
+if(matchMedia('(hover:hover)').matches){const g=$('#glow');addEventListener('pointermove',e=>{g.style.transform=`translate(${e.clientX-210}px,${e.clientY-210}px)`})}
+addEventListener('hashchange',()=>{ANIM=true;boot()});matchMedia('(prefers-color-scheme:dark)').addEventListener('change',theme);boot();
+</script></body></html>
