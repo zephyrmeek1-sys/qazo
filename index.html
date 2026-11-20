@@ -125,7 +125,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const addD=(s,n)=>{const d=new Date(s+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
 const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',qazo:'<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/>',stats:'<path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/>',profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'};
 const ico=k=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
-const logo=`<svg class="logo" viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="var(--ac)"/><path d="M29 11a13 13 0 1 0 0 26 10.5 10.5 0 1 1 0-26z" fill="var(--onac)"/><circle cx="34" cy="16" r="2.4" fill="var(--gold)"/></svg>`;
+const logo=`<img class="logo" src="/logo.png" alt="Namaz Chacker" style="width:48px;height:48px;object-fit:contain;">`;
 const chipsLang=fn=>`<div class="chips" style="justify-content:center">${[['uz','Lotin'],['cy','Кирилл'],['ru','Рус']].map(([l,n])=>`<button class="chip ${S.lang==l?'on':''}" onclick="${fn}('${l}')">${n}</button>`).join('')}</div>`;
 const newO=()=>({step:0,re:false,gender:'',name:'',birth:'',from:'',manual:false,start:'',married:null,kids:0,pregYN:null,hayz:7,nifas:40,pregN:1,pm:[],target:1});
 let O=newO();
