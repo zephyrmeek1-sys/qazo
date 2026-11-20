@@ -19,6 +19,22 @@ create table if not exists public.profiles(
 alter table public.profiles add column if not exists pregnancies int[] default '{}';
 alter table public.profiles add column if not exists avatar_url text;
 alter table public.profiles add column if not exists notify boolean default false;
+alter table public.profiles add column if not exists notify_prefs jsonb not null default '{}'::jsonb;
+alter table public.profiles add column if not exists daily_target int not null default 1;
+do $$ begin
+  if not exists (select 1 from pg_constraint where conname='profiles_daily_target_chk') then
+    alter table public.profiles add constraint profiles_daily_target_chk check (daily_target between 1 and 3);
+  end if;
+end $$;
+
+-- Adminga yozilgan so'rovlar (parolni unutgan va h.k.)
+create table if not exists public.support_requests(
+  id bigserial primary key, created_at timestamptz default now(),
+  user_id uuid references auth.users on delete set null,
+  name text not null, phone text not null, reason text not null, message text,
+  status text not null default 'new' check (status in ('new','done')));
+alter table public.support_requests enable row level security;
+revoke all on public.support_requests from anon, authenticated;
 
 create table if not exists public.qazo_balance(
   user_id uuid references auth.users on delete cascade,
@@ -32,7 +48,16 @@ create table if not exists public.prayer_log(
   created_at timestamptz default now(), primary key(user_id, day, prayer));
 create table if not exists public.qazo_log(
   user_id uuid references auth.users on delete cascade, day date, prayer text,
-  created_at timestamptz default now(), primary key(user_id, day, prayer));
+  slot int not null default 1,
+  created_at timestamptz default now(), primary key(user_id, day, prayer, slot));
+-- eski jadval (slot'siz) bo'lsa, ma'lumotni saqlagan holda yangilash
+alter table public.qazo_log add column if not exists slot int not null default 1;
+do $$ begin
+  if exists (select 1 from pg_constraint where conrelid='public.qazo_log'::regclass and contype='p' and array_length(conkey,1)=3) then
+    alter table public.qazo_log drop constraint qazo_log_pkey;
+    alter table public.qazo_log add primary key (user_id, day, prayer, slot);
+  end if;
+end $$;
 create table if not exists public.hayz_log(
   user_id uuid references auth.users on delete cascade, day date,
   primary key(user_id, day));
@@ -60,7 +85,7 @@ end $$;
 revoke all on public.admins from anon, authenticated;
 drop policy if exists own_update on public.profiles;
 create policy own_update on public.profiles for update to authenticated using (user_id = auth.uid());
-grant update (name, city, asr_school, lang, theme, avatar_url, notify) on public.profiles to authenticated;
+grant update (name, city, asr_school, lang, theme, avatar_url, notify, notify_prefs, daily_target) on public.profiles to authenticated;
 
 -- Qazo hisoblash + profil saqlash (server tomonda, deterministik)
 drop function if exists public.setup_profile(text,text,date,date,date,boolean,int,int,int,int);
@@ -148,17 +173,7 @@ create or replace function public.is_admin() returns boolean
 language sql security definer set search_path = public stable as
 $$ select exists(select 1 from admins where user_id = auth.uid()) $$;
 
-create or replace function public.admin_users()
-returns table(user_id uuid, phone text, name text, gender text, created_at timestamptz, last_sign_in timestamptz, remaining bigint)
-language plpgsql security definer set search_path = public as $$
-begin
-  if not is_admin() then raise exception 'not admin'; end if;
-  return query select u.id, split_part(u.email,'@',1)::text, p.name::text, p.gender::text, u.created_at, u.last_sign_in_at,
-    (coalesce((select sum(b.initial) from qazo_balance b where b.user_id=u.id),0)
-    - (select count(*) from qazo_log q where q.user_id=u.id))::bigint
-  from auth.users u left join profiles p on p.user_id=u.id
-  where not exists (select 1 from admins a where a.user_id=u.id) order by u.created_at desc;
-end $$;
+
 
 -- Parol hech qachon ko'rsatilmaydi (hash). Admin faqat yangi parol qo'ya oladi.
 create or replace function public.admin_reset_password(p_user uuid, p_pass text) returns void
@@ -176,13 +191,141 @@ begin
   delete from auth.users where id = p_user;
 end $$;
 
+-- Bir kunda bir nechta qazo: p_count = shu kuni shu namozdan o'qilgan jami qazo soni
+create or replace function public.set_qazo(p_prayer text, p_day date, p_count int)
+returns void language plpgsql security definer set search_path = public as $$
+declare uid uuid := auth.uid(); cur int; rem int;
+begin
+  if uid is null then raise exception 'auth'; end if;
+  if p_day > current_date + 1 then raise exception 'future'; end if;
+  if p_prayer not in ('bomdod','peshin','asr','shom','xufton','vitr') then raise exception 'prayer'; end if;
+  if p_count < 0 or p_count > 20 then raise exception 'count'; end if;
+  perform pg_advisory_xact_lock(hashtext(uid::text || p_prayer));
+  select count(*) into cur from qazo_log where user_id=uid and day=p_day and prayer=p_prayer;
+  if p_count > cur then
+    select b.initial - (select count(*) from qazo_log q where q.user_id=uid and q.prayer=p_prayer) into rem
+      from qazo_balance b where b.user_id=uid and b.prayer=p_prayer;
+    if coalesce(rem,0) < p_count - cur then raise exception 'empty'; end if;
+  end if;
+  delete from qazo_log where user_id=uid and day=p_day and prayer=p_prayer and slot > p_count;
+  insert into qazo_log(user_id, day, prayer, slot)
+    select uid, p_day, p_prayer, g from generate_series(1, p_count) g on conflict do nothing;
+  insert into audit_log(user_id, action, detail) values (uid, 'qazo',
+    jsonb_build_object('prayer', p_prayer, 'day', p_day, 'count', p_count, 'on', p_count >= cur));
+end $$;
+
+-- Adminga yozish (ro'yxatdan o'tmagan foydalanuvchi ham yubora oladi; spamdan himoya bilan)
+create or replace function public.submit_support(p_name text, p_phone text, p_reason text, p_message text)
+returns void language plpgsql security definer set search_path = public as $$
+declare ph text := regexp_replace(coalesce(p_phone,''), '\D', '', 'g');
+begin
+  if length(trim(coalesce(p_name,''))) < 2 or length(p_name) > 80 then raise exception 'name'; end if;
+  if length(ph) < 9 or length(ph) > 15 then raise exception 'phone'; end if;
+  if p_reason not in ('password','login','calc','idea','other') then raise exception 'reason'; end if;
+  if length(coalesce(p_message,'')) > 500 then raise exception 'long'; end if;
+  if (select count(*) from support_requests where phone = ph and created_at > now() - interval '1 hour') >= 5 then raise exception 'rate'; end if;
+  insert into support_requests(user_id, name, phone, reason, message)
+  values (auth.uid(), trim(p_name), ph, p_reason, nullif(trim(coalesce(p_message,'')), ''));
+end $$;
+
+-- ADMIN: umumiy ko'rsatkichlar
+create or replace function public.admin_overview() returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare r jsonb;
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  with u as (select id, created_at, last_sign_in_at from auth.users where id not in (select user_id from admins))
+  select jsonb_build_object(
+    'users', (select count(*) from u),
+    'new_today', (select count(*) from u where created_at >= date_trunc('day', now())),
+    'new_7d', (select count(*) from u where created_at > now() - interval '7 days'),
+    'active_7d', (select count(*) from u where last_sign_in_at > now() - interval '7 days'),
+    'male', (select count(*) from profiles p join u on u.id=p.user_id where p.gender='male'),
+    'female', (select count(*) from profiles p join u on u.id=p.user_id where p.gender='female'),
+    'remaining', (select coalesce(sum(b.initial),0) from qazo_balance b join u on u.id=b.user_id)
+                 - (select count(*) from qazo_log q join u on u.id=q.user_id),
+    'done', (select count(*) from qazo_log q join u on u.id=q.user_id),
+    'done_today', (select count(*) from qazo_log q join u on u.id=q.user_id where q.day = current_date),
+    'done_7d', (select count(*) from qazo_log q join u on u.id=q.user_id where q.day > current_date - 7),
+    'requests_new', (select count(*) from support_requests where status='new'),
+    'reg14', (select coalesce(jsonb_agg(jsonb_build_object('day', g::date, 'n', (select count(*) from u where u.created_at::date = g::date)) order by g), '[]'::jsonb)
+              from generate_series(current_date - 13, current_date, interval '1 day') g)
+  ) into r;
+  return r;
+end $$;
+
+drop function if exists public.admin_users();
+create or replace function public.admin_users()
+returns table(user_id uuid, phone text, name text, gender text, created_at timestamptz, last_sign_in timestamptz,
+              remaining bigint, done bigint, target int, city text)
+language plpgsql security definer set search_path = public as $$
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  return query select u.id, split_part(u.email,'@',1)::text, p.name::text, p.gender::text, u.created_at, u.last_sign_in_at,
+    (coalesce((select sum(b.initial) from qazo_balance b where b.user_id=u.id),0)
+      - (select count(*) from qazo_log q where q.user_id=u.id))::bigint,
+    (select count(*) from qazo_log q where q.user_id=u.id)::bigint,
+    p.daily_target, p.city::text
+  from auth.users u left join profiles p on p.user_id=u.id
+  where not exists (select 1 from admins a where a.user_id=u.id) order by u.created_at desc;
+end $$;
+
+create or replace function public.admin_user_detail(p_user uuid) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare r jsonb;
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  select jsonb_build_object('profile', to_jsonb(p) - 'user_id' - 'hayz_days' - 'pregnancies' - 'preg_months' - 'nifas_days' - 'married' - 'children' - 'notify_prefs',
+    'phone', p.phone,
+    'bal', coalesce((select jsonb_object_agg(b.prayer, jsonb_build_object('initial', b.initial,
+        'done', (select count(*) from qazo_log q where q.user_id=b.user_id and q.prayer=b.prayer)))
+        from qazo_balance b where b.user_id=p_user), '{}'::jsonb),
+    'recent', coalesce((select jsonb_agg(x) from (select action, detail, created_at from audit_log
+        where user_id=p_user and action <> 'hayz' order by created_at desc limit 15) x), '[]'::jsonb))
+  into r from profiles p where p.user_id = p_user;
+  return coalesce(r, '{}'::jsonb);
+end $$;
+
+create or replace function public.admin_requests()
+returns table(id bigint, created_at timestamptz, name text, phone text, reason text, message text, status text)
+language plpgsql security definer set search_path = public as $$
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  return query select s.id, s.created_at, s.name, s.phone, s.reason, s.message, s.status
+    from support_requests s order by (s.status = 'new') desc, s.created_at desc limit 200;
+end $$;
+
+create or replace function public.admin_set_request(p_id bigint, p_status text) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  if p_status not in ('new','done') then raise exception 'status'; end if;
+  update support_requests set status = p_status where id = p_id;
+end $$;
+
+create or replace function public.admin_activity(p_limit int default 60)
+returns table(created_at timestamptz, phone text, action text, detail jsonb)
+language plpgsql security definer set search_path = public as $$
+begin
+  if not is_admin() then raise exception 'not admin'; end if;
+  return query select a.created_at, split_part(u.email,'@',1)::text, a.action::text, a.detail
+    from audit_log a join auth.users u on u.id = a.user_id
+    where not exists (select 1 from admins ad where ad.user_id = a.user_id) and a.action <> 'hayz'
+    order by a.created_at desc limit least(greatest(p_limit,1), 200);
+end $$;
+
+
 do $$ declare f text; begin
   foreach f in array array['setup_profile(text,text,date,date,date,boolean,int,int,int,int[])','toggle_item(text,text,date,boolean)',
-    'qazo_stats()','is_admin()','admin_users()','admin_reset_password(uuid,text)','admin_delete_user(uuid)'] loop
+    'qazo_stats()','is_admin()','admin_users()','admin_reset_password(uuid,text)','admin_delete_user(uuid)',
+    'set_qazo(text,date,int)','admin_overview()','admin_user_detail(uuid)','admin_requests()','admin_set_request(bigint,text)','admin_activity(int)'] loop
     execute format('revoke all on function public.%s from public, anon', f);
     execute format('grant execute on function public.%s to authenticated', f);
   end loop;
 end $$;
+
+revoke all on function public.submit_support(text,text,text,text) from public;
+grant execute on function public.submit_support(text,text,text,text) to anon, authenticated;
 
 -- ADMIN QO'SHISH: avval Authentication > Users'da email+parol bilan user yarating,
 -- so'ng emailni o'zgartirib shu qatorni alohida Run qiling:
